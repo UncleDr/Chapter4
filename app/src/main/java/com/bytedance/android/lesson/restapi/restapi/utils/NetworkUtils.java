@@ -22,13 +22,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class NetworkUtils {
 
-    public static Joke getResponseWithRetrofit() throws IOException {
+    public static Joke getResponseWithRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.icndb.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Response<Joke> response = retrofit.create(ICNDBService.class).randomJoke().execute();
+        Response<Joke> response = null;
+        try {
+            response = retrofit.create(ICNDBService.class).randomJoke().execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return response == null ? null : response.body();
     }
 
@@ -43,7 +48,7 @@ public class NetworkUtils {
             in = new BufferedInputStream(urlConnection.getInputStream());
             result = readStream(in);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();

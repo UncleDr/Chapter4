@@ -2,9 +2,12 @@ package com.bytedance.android.lesson.restapi.restapi;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
+import com.bytedance.android.lesson.restapi.restapi.bean.Joke;
 import com.bytedance.android.lesson.restapi.restapi.bean.OSList;
+import com.bytedance.android.lesson.restapi.restapi.utils.NetworkUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -16,13 +19,26 @@ public class MainActivity extends AppCompatActivity {
     public static String RAW =
             "{\"os\":[{\"name\":\"Pie\",\"code\":28}," +
                     "{\"name\":\"Oreo\",\"code\":27}]}";
+    public TextView mTv;
+    private View mBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView tv = findViewById(R.id.tv);
-        tv.setText(parseFirstNameWithGson());
+        mTv = findViewById(R.id.tv);
+        mBtn = findViewById(R.id.btn);
+//        mTv.setText(parseFirstNameWithJSON()); // json test
+//        mTv.setText(parseFirstNameWithGson()); // json test
+        initListeners();
+    }
+
+    private void initListeners() {
+        mBtn.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                requestData(v);
+            }
+        });
     }
 
     private static String parseFirstNameWithGson() {
@@ -42,5 +58,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public void requestData(View view) {
+        // HttpURLConnection
+//        String s = NetworkUtils.getResponseWithHttpURLConnection("https://api.icndb.com/jokes/random");
+//        mTv.setText(s);
+
+        // Retrofit
+        Joke j = NetworkUtils.getResponseWithRetrofit();
+        mTv.setText(j.getValue().getJoke());
     }
 }

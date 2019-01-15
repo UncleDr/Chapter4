@@ -26,7 +26,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testRequestWithRetrofit() throws Exception {
+    public void testRequestWithRetrofit() {
         Joke j = NetworkUtils.getResponseWithRetrofit();
         System.out.println(j.getValue().getJoke());
     }
