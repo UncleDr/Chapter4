@@ -1,5 +1,6 @@
 package com.bytedance.android.lesson.restapi.restapi;
 
+import com.bytedance.android.lesson.restapi.restapi.bean.Joke;
 import com.bytedance.android.lesson.restapi.restapi.utils.NetworkUtils;
 
 import org.junit.Test;
@@ -22,5 +23,11 @@ public class ExampleUnitTest {
 //        String s = NetworkUtils.getResponseWithHttpURLConnection("https://www.android.com/");
         String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
         System.out.println(s);
+    }
+
+    @Test
+    public void testRequestWithRetrofit() throws Exception {
+        Joke j = NetworkUtils.getResponseWithRetrofit();
+        System.out.println(j.getValue().getJoke());
     }
 }

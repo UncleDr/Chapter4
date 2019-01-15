@@ -1,5 +1,8 @@
 package com.bytedance.android.lesson.restapi.restapi.utils;
 
+import com.bytedance.android.lesson.restapi.restapi.bean.Joke;
+import com.bytedance.android.lesson.restapi.restapi.newtork.ICNDBService;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,11 +12,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * @author Xavier.S
  * @date 2019.01.15 13:27
  */
 public class NetworkUtils {
+
+    public static Joke getResponseWithRetrofit() throws IOException {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.icndb.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Response<Joke> response = retrofit.create(ICNDBService.class).randomJoke().execute();
+        return response == null ? null : response.body();
+    }
 
     public static String getResponseWithHttpURLConnection(String url) {
         String result = null;
