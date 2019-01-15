@@ -1,8 +1,10 @@
 package com.bytedance.android.lesson.restapi.restapi;
 
+import com.bytedance.android.lesson.restapi.restapi.utils.NetworkUtils;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -13,5 +15,12 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void testRequestWithURLConnection() {
+//        String s = NetworkUtils.getResponseWithHttpURLConnection("https://www.android.com/");
+        String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
+        System.out.println(s);
     }
 }
