@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bytedance.android.lesson.restapi.restapi.bean.Joke;
 import com.bytedance.android.lesson.restapi.restapi.bean.OSList;
@@ -13,6 +14,10 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,11 +75,22 @@ public class MainActivity extends AppCompatActivity {
 //        mTv.setText(j.getValue().getJoke());
 
         // HttpURLConnection Async
-        new Thread() {
-            @Override public void run() {
-                String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
-                mTv.setText(s);
+//        new Thread() {
+//            @Override public void run() {
+//                String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
+//                mTv.setText(s);
+//            }
+//        }.start();
+
+        // Retrofit Async
+        NetworkUtils.getResponseWithRetrofitAsync(new Callback<Joke>() {
+            @Override public void onResponse(Call<Joke> call, Response<Joke> response) {
+                mTv.setText(response.body().getValue().getJoke().replace("&quot;", "\""));
             }
-        }.start();
+
+            @Override public void onFailure(Call<Joke> call, Throwable t) {
+                Toast.makeText(MainActivity.this.getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

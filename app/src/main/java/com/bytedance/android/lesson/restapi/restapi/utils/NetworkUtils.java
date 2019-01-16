@@ -1,5 +1,7 @@
 package com.bytedance.android.lesson.restapi.restapi.utils;
 
+import android.util.Log;
+
 import com.bytedance.android.lesson.restapi.restapi.bean.Joke;
 import com.bytedance.android.lesson.restapi.restapi.newtork.ICNDBService;
 
@@ -12,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,11 +34,22 @@ public class NetworkUtils {
 
         Response<Joke> response = null;
         try {
-            response = retrofit.create(ICNDBService.class).randomJoke().execute();
+            response = retrofit.create(ICNDBService.class).randomJoke().
+                    execute();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return response == null ? null : response.body();
+    }
+
+    public static void getResponseWithRetrofitAsync(Callback<Joke> callback) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.icndb.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        retrofit.create(ICNDBService.class).randomJoke().
+        enqueue(callback);
     }
 
     public static String getResponseWithHttpURLConnection(String url) {
