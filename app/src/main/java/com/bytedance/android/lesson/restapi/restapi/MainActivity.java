@@ -75,15 +75,19 @@ public class MainActivity extends AppCompatActivity {
 //        mTv.setText(j.getValue().getJoke());
 
         // HttpURLConnection Async
-//        new Thread() {
-//            @Override public void run() {
-//                String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
-//                mTv.setText(s);
-//            }
-//        }.start();
+        new Thread() {
+            @Override public void run() {
+                final String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mTv.setText(s);
+                    }
+                });
+            }
+        }.start();
 
         // Retrofit Async
-        NetworkUtils.getResponseWithRetrofitAsync(new Callback<Joke>() {
+        /*NetworkUtils.getResponseWithRetrofitAsync(new Callback<Joke>() {
             @Override public void onResponse(Call<Joke> call, Response<Joke> response) {
                 mTv.setText(response.body().getValue().getJoke().replace("&quot;", "\""));
             }
@@ -91,6 +95,6 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onFailure(Call<Joke> call, Throwable t) {
                 Toast.makeText(MainActivity.this.getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 }
