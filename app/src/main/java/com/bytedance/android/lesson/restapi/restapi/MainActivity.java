@@ -66,7 +66,15 @@ public class MainActivity extends AppCompatActivity {
 //        mTv.setText(s);
 
         // Retrofit
-        Joke j = NetworkUtils.getResponseWithRetrofit();
-        mTv.setText(j.getValue().getJoke());
+//        Joke j = NetworkUtils.getResponseWithRetrofit();
+//        mTv.setText(j.getValue().getJoke());
+
+        // HttpURLConnection Async
+        new Thread() {
+            @Override public void run() {
+                String s = NetworkUtils.getResponseWithHttpURLConnection("http://api.icndb.com/jokes/random");
+                mTv.setText(s);
+            }
+        }.start();
     }
 }
